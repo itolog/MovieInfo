@@ -1,9 +1,11 @@
+@import '../../assets/mixins/mixins';
 .main{
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   background :url("http://i.playground.ru/i/52/92/22/00/blog/content/y4nrg0e1.jpg") no-repeat;
+  background-size: cover;
   background-attachment: fixed;
 }
 .movie{
@@ -28,6 +30,9 @@
     font-size: 1.3em;
     text-align: center;
   }
+  @include phones {
+    flex-flow: column;
+  }
 }
 .header__href{
   flex: 1;
@@ -40,10 +45,24 @@
     transition: 1s;
     text-align: center;
   }
+  @include phones {
+    width: 100%;
+    height: 100px;
+    padding: 10px 0 10px 0;
+    text-align: center;
+  }
 }
+//  content
 .content{
   display: flex;
   margin-bottom: 30px;
+  
+  @include phones {
+    flex-flow: column;
+    img {
+      width: 100%;
+    }
+  }
 }
 .content__info{
   display: flex;

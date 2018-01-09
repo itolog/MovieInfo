@@ -5,7 +5,7 @@
 </template>
 
 <script>
-const appMain = () => import('./components/app-main.vue')
+const appMain = () => import('./components/app-main/app-main')
 const appCard = () => import('./components/card/app-card.vue')
 export default {
   name: 'app',

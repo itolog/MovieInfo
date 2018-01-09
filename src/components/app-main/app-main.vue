@@ -4,8 +4,9 @@
 			<header class="header">
 				<h1 class="title">Movie info APP</h1>
 				<!-- <form v-on:submit="submit"></form> -->
-      	<input type="text" v-model="msg" placeholder="search movie">
+      	<input class="search" type="text" v-model="msg" placeholder="search movie">
 			</header>
+			<div class="server-err" v-if="err">{{ title }}</div>
 			<!-- movie cards -->
 			<div class="items" v-for="movie in movies" :key="movie.id">
 				<!-- info -->
@@ -28,7 +29,9 @@ export default {
   name: 'app-main',
   data () {
     return {
-			msg: 'batman',
+			msg: '',
+			title: '',
+			err: false,
 			movies: []
     }
   },
@@ -37,15 +40,25 @@ export default {
       this.$http.get(`http://www.omdbapi.com/?s=${val}&apikey=23ec762a`).then(response => {
 				this.movies = response.body.Search
       }, response => {
-        this.title = 'Error'
+        this.title = 'Server Error'
+				this.err = true
       })
     },
 		toCard (evt) {
 			let name = this.msg
 			this.$router.push({ path: 'card', query: { movie: evt.toLowerCase() } })
+		},
+		searchNull () {
+				if (this.movies == undefined) {
+					this.err = true
+					this.title = 'no such movie...'
+				} else {
+					this.err = false
+				}
 		}
   },
   updated () {
+		this.searchNull()
 		this.getAll(this.msg)
   }
 }
@@ -53,39 +66,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang='scss' scoped>
-  .main{
-    display: flex;
-		justify-content: center;
-    width: 100%;
-		background: url('https://www.thebitbag.com/wp-content/uploads/2016/11/Deadpool-2-Movie.jpg') no-repeat;
-		background-attachment: fixed;
-  }
-	.header{
-		display: flex;
-		flex-flow: column;
-		width: 100%;
-		background: orange;
-		margin-bottom: 20px;
-	}
-  .movies{
-		display: flex;
-		flex-flow: column;
-		width: 100%;
-		padding: 10px;
-		margin-bottom: 50px;
-	}
-	.items{
-		display: flex;
-		flex-flow: column;
-		margin: auto;
-		background: rgb(190, 179, 179);
-		margin-bottom: 20px;
-		padding: 20px;
-	}
-	.items__info{
-		margin-bottom: 10px;
-		h3{
-			cursor: pointer;
-		}
-	}
+  @import './app-main';
 </style>
