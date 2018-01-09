@@ -1,6 +1,6 @@
-# land
+# Movie Info Search
 
-> vue landing one page scroll
+> Movie info search 
 
 ## Build Setup
 
