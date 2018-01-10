@@ -3,8 +3,7 @@
     <section class="movies">
 			<header class="header">
 				<h1 class="title">Movie info APP</h1>
-				<!-- <form v-on:submit="submit"></form> -->
-      	<input class="search" type="text" v-model="msg" placeholder="search movie">
+      	<input class="search" type="text" v-model="msg" placeholder="please enter the name of the movie..." autofocus>
 			</header>
 			<div class="server-err" v-if="err">{{ title }}</div>
 			<!-- movie cards -->
@@ -21,6 +20,11 @@
 			</div>
 			<!-- movie cards end -->
     </section>
+		<section class="navigation">
+			<button class="navigation__btn_prev" v-on:click="prev">PREV</button>
+			<button class="navigation__btn_next" v-on:click="next">NEXT</button>
+		</section>
+		<button class="upp" @click="upp">upp</button>
   </main>
 </template>
 
@@ -30,15 +34,23 @@ export default {
   data () {
     return {
 			msg: '',
+			idPage: 1,
 			title: '',
 			err: false,
-			movies: []
+			movies: [],
+			dataMovie: []
     }
   },
+	computed: {
+		lastPage () {
+			return Math.ceil(this.dataMovie / 10);
+		}
+ 	}, 
   methods: {
-    getAll (val) {
-      this.$http.get(`http://www.omdbapi.com/?s=${val}&apikey=23ec762a`).then(response => {
+    getAll (name, page = 1) {
+      this.$http.get(`http://www.omdbapi.com/?s=${name}&page=${page}&apikey=23ec762a`).then(response => {
 				this.movies = response.body.Search
+				this.dataMovie = response.body.totalResults
       }, response => {
         this.title = 'Server Error'
 				this.err = true
@@ -55,11 +67,32 @@ export default {
 				} else {
 					this.err = false
 				}
+		},
+		prev () {
+		if ( this.idPage > 1) {
+				this.idPage--;
+				window.scrollTo( 0, 0 );
+		}
+		
+		},
+		next () {
+			if (this.idPage < this.lastPage) {
+				this.idPage++;
+				window.scrollTo( 0, 0 );
+			}	
+		},
+		upp () {
+			window.scrollTo( 0, 0 );
 		}
   },
+	created  () {
+			// this.getAll("terminator", this.indexPage)
+	},
   updated () {
 		this.searchNull()
-		this.getAll(this.msg)
+		setTimeout(() => {
+			this.getAll(this.msg, this.idPage)
+		}, 500)
   }
 }
 </script>
