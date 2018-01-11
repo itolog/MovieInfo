@@ -20,11 +20,11 @@
 			</div>
 			<!-- movie cards end -->
     </section>
-		<section class="navigation">
+		<section class="navigation" v-if="scrollBottom">
 			<button class="navigation__btn_prev" v-on:click="prev">PREV</button>
 			<button class="navigation__btn_next" v-on:click="next">NEXT</button>
 		</section>
-		<button class="upp" @click="upp">upp</button>
+		<button class="upp" @click="upp" v-if="scrollBottom">upp</button>
   </main>
 </template>
 
@@ -36,6 +36,8 @@ export default {
 			msg: '',
 			idPage: 1,
 			title: '',
+			scrollBottom: false,
+			scrolled: false,
 			err: false,
 			movies: [],
 			dataMovie: []
@@ -47,6 +49,16 @@ export default {
 		}
  	}, 
   methods: {
+		// scrolled function
+		scroll () {
+			this.scrolled = window.pageYOffset
+			if (this.scrolled >= 200) {
+				this.scrollBottom = true
+			} else {
+				this.scrollBottom = false
+			}
+		},
+		// GET all movies
     getAll (name, page = 1) {
       this.$http.get(`http://www.omdbapi.com/?s=${name}&page=${page}&apikey=23ec762a`).then(response => {
 				this.movies = response.body.Search
@@ -55,11 +67,13 @@ export default {
         this.title = 'Server Error'
 				this.err = true
       })
-    },
+		},
+		//  Routing
 		toCard (evt) {
 			let name = this.msg
 			this.$router.push({ path: 'card', query: { movie: evt.toLowerCase() } })
 		},
+		// check for availability movies
 		searchNull () {
 				if (this.movies == undefined) {
 					this.err = true
@@ -86,7 +100,10 @@ export default {
 		}
   },
 	created  () {
-			// this.getAll("terminator", this.indexPage)
+			window.addEventListener('scroll', this.scroll)
+	},
+	destroyed () {
+		window.removeEventListener('scroll', this.scroll);
 	},
   updated () {
 		this.searchNull()
