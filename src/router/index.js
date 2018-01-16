@@ -17,5 +17,6 @@ export default new Router({
       name: 'Main',
       component: Card
     }
-  ]
+  ],
+  mode: 'history'
 })

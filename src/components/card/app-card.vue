@@ -80,8 +80,13 @@ export default {
       })
     }
   },
+  computed: {
+    mov () {
+      return this.$route.query.movie
+    }
+  },
   created () {
-    this.queryMovie = window.location.hash.slice(13)
+    this.queryMovie = this.mov
     this.getCard(this.queryMovie)
   }
 }

@@ -99,11 +99,17 @@
   .upp{
     position: fixed;
     bottom: 60px;
-    right: 5px;
-    width: 40px;
-    height: 70px;
-    background: rgba(10, 1, 14, 0.88);
+    right: 10px;
     color: orange;
     cursor: pointer;
-    border: 1px solid lime;
+    // border: 1px solid lime;
+  }
+  .upp-enter-active, .upp-leave-active {
+    transition: .5s;
+    transform: translateY('')
+  }
+  .upp-enter, .upp-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+    transition: .5s;
+    opacity: 0;
+    transform: translateY(-100vh)
   }

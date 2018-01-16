@@ -1,7 +1,7 @@
 <template>
   <main class="main">
     <section class="movies">
-			<header class="header">
+			<header class="header" id="t2">
 				<h1 class="title">Movie info APP</h1>
       	<input class="search" type="text" v-model="msg" placeholder="please enter the name of the movie..." autofocus>
 			</header>
@@ -24,7 +24,13 @@
 			<button class="navigation__btn_prev" v-on:click="prev">PREV</button>
 			<button class="navigation__btn_next" v-on:click="next">NEXT</button>
 		</section>
-		<button class="upp" @click="upp" v-if="scrollBottom">upp</button>
+		<transition name="upp" >
+			<scroll-to target="#t2" class="upp" v-if="scrollBottom" >
+				<span class="icon is-large">
+  				<i class="fa fa-chevron-up"></i>
+				</span>
+			</scroll-to>
+		</transition>
   </main>
 </template>
 
@@ -94,9 +100,6 @@ export default {
 				this.idPage++;
 				window.scrollTo( 0, 0 );
 			}	
-		},
-		upp () {
-			window.scrollTo( 0, 0 );
 		}
   },
 	created  () {
