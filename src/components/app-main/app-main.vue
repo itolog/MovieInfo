@@ -7,17 +7,20 @@
 			</header>
 			<div class="server-err" v-if="err">{{ title }}</div>
 			<!-- movie cards -->
-			<div class="items" v-for="movie in movies" :key="movie.id">
-				<!-- info -->
-				<div class="items__info" title="more info">
-					<h3 class="items__title" v-on:click="toCard($event.target.innerText)">{{movie.Title}}</h3>
-					<span class="items__year">Year: {{movie.Year}}</span>
-				</div>
-				<!-- poster -->
-				<div class="items__poster">
-					<img class="items__poster_img" :src=movie.Poster alt="poster">
-				</div>
-			</div>
+			<transition-group name="card" tag="div">
+					<div class="items" v-for="(movie, key) in movies" :key="key">
+						<!-- info -->
+						<div class="items__info" title="more info">
+							<h3 class="items__title" v-on:click="toCard($event.target.innerText)">{{movie.Title}}</h3>
+							<span class="items__year">Year: {{movie.Year}}</span>
+						</div>
+						<!-- poster -->
+						<div class="items__poster">
+							<img class="items__poster_img" :src=movie.Poster alt="poster">
+						</div>
+					</div>
+			</transition-group>
+			
 			<!-- movie cards end -->
     </section>
 		<section class="navigation" v-if="scrollBottom">
