@@ -3,9 +3,14 @@
     <section class="movies">
 			<header class="header" id="t2">
 				<h1 class="title">Movie info APP</h1>
-      	<input class="search" type="text" v-model="msg" placeholder="please enter the name of the movie..." autofocus>
+      	<input class="search" type="text" v-on:keyup.13="submit($event)" placeholder="please enter the name of the movie..." autofocus>
 			</header>
-			<div class="server-err" v-if="err">{{ title }}</div>
+			<!-- errors -->
+			<div class="undef-err" v-if="err">{{ title }}</div>
+			<div class="undef-err" v-if="serverErr">
+					{{ errTitle }} <br>
+					<span>{{ errTxt }}</span>
+			</div>
 			<!-- movie cards -->
 			<transition-group name="card" tag="div">
 					<div class="items" v-for="(movie, key) in movies" :key="key">
@@ -44,10 +49,15 @@ export default {
     return {
 			msg: '',
 			idPage: 1,
+			// error variable
 			title: '',
+			errTitle: '',
+			errTxt: '',
+			serverErr: false,
+			err: false,
+			// 
 			scrollBottom: false,
 			scrolled: false,
-			err: false,
 			movies: [],
 			dataMovie: []
     }
@@ -58,6 +68,10 @@ export default {
 		}
  	}, 
   methods: {
+  	submit(e) {
+  		this.msg = e.target.value
+  		this.getAll(this.msg, this.idPage)
+  	},
 		// scrolled function
 		scroll () {
 			this.scrolled = window.pageYOffset
@@ -72,9 +86,10 @@ export default {
       this.$http.get(`http://www.omdbapi.com/?s=${name}&page=${page}&apikey=23ec762a`).then(response => {
 				this.movies = response.body.Search
 				this.dataMovie = response.body.totalResults
-      }, response => {
-        this.title = 'Server Error'
-				this.err = true
+      }, err => {
+        this.errTitle = 'Server Error'
+				this.serverErr = true
+				this.errTxt = err.body.Error
       })
 		},
 		//  Routing
@@ -86,7 +101,7 @@ export default {
 		searchNull () {
 				if (this.movies == undefined) {
 					this.err = true
-					this.title = 'no such movie...'
+					this.title = 'No such movie...'
 				} else {
 					this.err = false
 				}
@@ -106,16 +121,18 @@ export default {
 		}
   },
 	created  () {
-			window.addEventListener('scroll', this.scroll)
+			window.addEventListener('scroll', this.scroll, true)
+			
 	},
 	destroyed () {
-		window.removeEventListener('scroll', this.scroll);
+		window.removeEventListener('scroll', this.scroll, true);
 	},
   updated () {
 		this.searchNull()
-		setTimeout(() => {
-			this.getAll(this.msg, this.idPage)
-		}, 500)
+		// Функция срабатывает при изменении импута.отправляет много запросов
+		// setTimeout(() => {
+		// 	this.getAll(this.msg, this.idPage)
+		// }, 800)
   }
 }
 </script>

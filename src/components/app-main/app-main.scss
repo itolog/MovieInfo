@@ -2,7 +2,7 @@
 .main{
   display: flex;
   flex-flow: column;
-  justify-content: center;
+  // justify-content: center;
   width: 100%;
   min-height: 100%;
   background: url('https://www.thebitbag.com/wp-content/uploads/2016/11/Deadpool-2-Movie.jpg') no-repeat;
@@ -31,7 +31,7 @@
   margin-bottom: 10px;
   text-align: center;
   background: #000;
-  color: lightcoral;
+  color: orange;
 }
 .movies{
   display: flex;
@@ -69,10 +69,12 @@
     border-bottom: 1px solid grey;
   }
 }
-.server-err{
-    border: 3px solid black;
+//  ERR
+.undef-err{
+    border: 5px solid red;
+    border-radius: 10px;
     color: whitesmoke;
-    background: grey;
+    background: rgb(0, 0, 0);
     opacity: 0.9;
     padding: 30px;
   }
@@ -102,7 +104,11 @@
     right: 10px;
     color: orange;
     cursor: pointer;
-    // border: 1px solid lime;
+    &:hover{
+      color: orangered;
+      transform: rotateY(180deg);
+      transition: .3s;
+    }
   }
   .upp-enter-active, .upp-leave-active {
     transition: .5s;
